@@ -8,9 +8,6 @@ const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "openai/gpt-4.1";
 
-let requestCount = 0;
-const requestsPerDay = 50;
-
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 
 export async function Chatgpt(userMessage) {
@@ -34,7 +31,6 @@ export async function Chatgpt(userMessage) {
     });
 
     console.log("Chatgpt Response Status:", response.status);
-    // console.log("Chatgpt Response Body:", response.body);
   } catch (error) {
     console.log("Error With Chatgpt Api:", error);
     throw new Error("Error With Chatgpt Api Failed");
@@ -53,8 +49,6 @@ export async function Chatgpt(userMessage) {
 
   requestCount++;
   console.log(`Requests Remainning Today:`, requestsPerDay - requestCount);
-
-  console.log("✅ ChatGPT Response:", message.content);
 
   chatHistory.push({ role: "assistant", content: message.content });
 

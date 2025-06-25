@@ -55,8 +55,6 @@ export async function Core42(userMessage) {
     throw new Error("Core42 API did not return a message content.");
   }
 
-  console.log("✅ Core42 Response:", message.content);
-
   chatHistory.push({ role: "assistant", content: message.content });
 
   return message.content;

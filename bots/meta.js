@@ -55,8 +55,6 @@ export async function Meta(userMessage) {
     throw new Error("Meta API did not return a message content.");
   }
 
-  console.log("✅ Meta Response:", message.content);
-
   chatHistory.push({ role: "assistant", content: message.content });
 
   return message.content;

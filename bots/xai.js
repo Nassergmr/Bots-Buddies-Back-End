@@ -55,8 +55,6 @@ export async function XAi(userMessage) {
     throw new Error("xAi API did not return a message content.");
   }
 
-  console.log("✅ Xai Response:", message.content);
-
   chatHistory.push({ role: "assistant", content: message.content });
 
   return message.content;

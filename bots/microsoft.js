@@ -54,8 +54,6 @@ export async function Microsoft(userMessage) {
     throw new Error("Microsoft API did not return a message content.");
   }
 
-  console.log("✅ Microsoft Response:", message.content);
-
   chatHistory.push({ role: "assistant", content: message.content });
 
   return message.content;
