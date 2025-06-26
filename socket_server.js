@@ -15,6 +15,7 @@ export default async function SocketServer(server) {
     },
   });
 
+  // No logs or errors about rate limit from the server so had to track it manually
   let ChatGPTRequestCount = 0;
   let ChatGPTRequestsPerDay = 50;
 
@@ -47,12 +48,13 @@ export default async function SocketServer(server) {
     socket.on("chatgpt_conversation", async (userMessage) => {
       const remaining = ChatGPTRequestsPerDay - ChatGPTRequestCount;
 
-      if (remaining <= 0) {
+      if (remaining <= 2) {
         socket.emit("rate_limit_exceeded");
         return;
       }
 
       ChatGPTRequestCount++;
+
       console.log(" ChatGPT user message:", userMessage);
       console.log("Remaining ChatGPT requests:", remaining - 1);
 
@@ -69,7 +71,7 @@ export default async function SocketServer(server) {
     socket.on("meta_conversation", async (userMessage) => {
       const remaining = MetaRequestsPerDay - MetaRequestCount;
 
-      if (remaining <= 0) {
+      if (remaining <= 2) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -91,7 +93,7 @@ export default async function SocketServer(server) {
     socket.on("microsoft_conversation", async (userMessage) => {
       const remaining = MicrosoftRequestsPerDay - MicrosoftRequestCount;
 
-      if (remaining <= 0) {
+      if (remaining <= 2) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -113,7 +115,7 @@ export default async function SocketServer(server) {
     socket.on("xai_conversation", async (userMessage) => {
       const remaining = XAiRequestsPerDay - XAiRequestCount;
 
-      if (remaining <= 0) {
+      if (remaining <= 2) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -135,7 +137,7 @@ export default async function SocketServer(server) {
     socket.on("core42_conversation", async (userMessage) => {
       const remaining = Core42RequestsPerDay - Core42RequestCount;
 
-      if (remaining <= 0) {
+      if (remaining <= 2) {
         socket.emit("rate_limit_exceeded");
         return;
       }

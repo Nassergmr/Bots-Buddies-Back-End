@@ -8,7 +8,6 @@ const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "microsoft/Phi-4";
 
-let requestCount = 0;
 const requestsPerDay = 150;
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
@@ -35,13 +34,10 @@ export async function Microsoft(userMessage) {
     });
 
     console.log("Microsoft Response Status:", response.status);
-    // console.log("Microsoft Response Body:", response.body);
   } catch (error) {
     console.log("Error With Microsoft Api:", error);
     throw new Error("Error With Microsoft Api Failed");
   }
-
-  console.log(`Requests Remainning Today:`, requestsPerDay - requestCount);
 
   if (isUnexpected(response)) {
     throw response.body.error;

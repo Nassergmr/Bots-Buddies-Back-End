@@ -8,9 +8,6 @@ const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "core42/jais-30b-chat";
 
-let requestCount = 0;
-const requestsPerDay = 50;
-
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 
 export async function Core42(userMessage) {
@@ -35,14 +32,10 @@ export async function Core42(userMessage) {
     });
 
     console.log("Core42 Response Status:", response.status);
-    // console.log("Core42 Response Body:", response.body);
   } catch (error) {
     console.log("Error With Core42 Api:", error);
     throw new Error("Error With Core42 Api Failed");
   }
-
-  requestCount++;
-  console.log(`Requests Remainning Today:`, requestsPerDay - requestCount);
 
   if (isUnexpected(response)) {
     throw response.body.error;

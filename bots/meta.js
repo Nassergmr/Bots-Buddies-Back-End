@@ -8,9 +8,6 @@ const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "meta/Llama-4-Scout-17B-16E-Instruct";
 
-let requestCount = 0;
-const requestsPerDay = 50;
-
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 
 export async function Meta(userMessage) {
@@ -35,14 +32,10 @@ export async function Meta(userMessage) {
     });
 
     console.log("Meta Response Status:", response.status);
-    // console.log("Meta Response Body:", response.body);
   } catch (error) {
     console.log("Error With Meta Api:", error);
     throw new Error("Error With Meta Api Failed");
   }
-
-  requestCount++;
-  console.log(`Requests Remainning Today:`, requestsPerDay - requestCount);
 
   if (isUnexpected(response)) {
     throw response.body.error;

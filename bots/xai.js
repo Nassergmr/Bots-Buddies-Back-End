@@ -8,7 +8,6 @@ const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "xai/grok-3-mini";
 
-let requestCount = 0;
 const requestsPerDay = 30;
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
@@ -35,14 +34,10 @@ export async function XAi(userMessage) {
     });
 
     console.log("xAi Response Status:", response.status);
-    // console.log("xAi Response Body:", response.body);
   } catch (error) {
     console.log("Error With xAi Api:", error);
     throw new Error("Error With xAi Api Failed");
   }
-
-  requestCount++;
-  console.log(`Requests Remainning Today:`, requestsPerDay - requestCount);
 
   if (isUnexpected(response)) {
     throw response.body.error;

@@ -47,9 +47,6 @@ export async function Chatgpt(userMessage) {
     throw new Error("ChatGPT API did not return a message content.");
   }
 
-  requestCount++;
-  console.log(`Requests Remainning Today:`, requestsPerDay - requestCount);
-
   chatHistory.push({ role: "assistant", content: message.content });
 
   return message.content;
