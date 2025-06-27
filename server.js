@@ -22,8 +22,16 @@ process.on("SIGTERM", () => {
 // Load .env variables
 config();
 
-const PORT = process.env.PORT;
-const server = createServer();
+const PORT = process.env.PORT || 3001;
+const server = createServer((req, res) => {
+  if (req.url === "/health") {
+    res.writeHead(200);
+    res.end("OK");
+  } else {
+    res.writeHead(200);
+    res.end("Running");
+  }
+});
 
 console.log("ENV PORT:", PORT);
 console.log("Starting server...");
