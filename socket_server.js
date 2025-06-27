@@ -1,9 +1,9 @@
 import { Server } from "socket.io";
-import { Chatgpt } from "./bots/chatGpt.js";
-import { Meta } from "./bots/meta.js";
-import { Microsoft } from "./bots/microsoft.js";
-import { XAi } from "./bots/xai.js";
-import { Core42 } from "./bots/core42.js";
+import { Chatgpt } from "./models/chatGpt.js";
+import { Meta } from "./models/meta.js";
+import { Microsoft } from "./models/microsoft.js";
+import { XAi } from "./models/xai.js";
+import { Core42 } from "./models/core42.js";
 
 // Register a WebSocket server
 export default async function SocketServer(server) {
@@ -48,7 +48,7 @@ export default async function SocketServer(server) {
     socket.on("chatgpt_conversation", async (userMessage) => {
       const remaining = ChatGPTRequestsPerDay - ChatGPTRequestCount;
 
-      if (remaining <= 2) {
+      if (remaining <= 5) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -71,7 +71,7 @@ export default async function SocketServer(server) {
     socket.on("meta_conversation", async (userMessage) => {
       const remaining = MetaRequestsPerDay - MetaRequestCount;
 
-      if (remaining <= 2) {
+      if (remaining <= 5) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -93,7 +93,7 @@ export default async function SocketServer(server) {
     socket.on("microsoft_conversation", async (userMessage) => {
       const remaining = MicrosoftRequestsPerDay - MicrosoftRequestCount;
 
-      if (remaining <= 2) {
+      if (remaining <= 5) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -115,7 +115,7 @@ export default async function SocketServer(server) {
     socket.on("xai_conversation", async (userMessage) => {
       const remaining = XAiRequestsPerDay - XAiRequestCount;
 
-      if (remaining <= 2) {
+      if (remaining <= 5) {
         socket.emit("rate_limit_exceeded");
         return;
       }
@@ -137,7 +137,7 @@ export default async function SocketServer(server) {
     socket.on("core42_conversation", async (userMessage) => {
       const remaining = Core42RequestsPerDay - Core42RequestCount;
 
-      if (remaining <= 2) {
+      if (remaining <= 5) {
         socket.emit("rate_limit_exceeded");
         return;
       }
