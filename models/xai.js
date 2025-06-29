@@ -54,6 +54,3 @@ export async function XAi(userMessage) {
 
   return message.content;
 }
-XAi("testing... respond with the word success ✅")
-  .then(console.log)
-  .catch(console.error);

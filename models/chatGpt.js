@@ -51,6 +51,3 @@ export async function Chatgpt(userMessage) {
 
   return message.content;
 }
-Chatgpt("testing... respond with the word success ✅")
-  .then(console.log)
-  .catch(console.error);

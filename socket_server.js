@@ -4,6 +4,7 @@ import { Meta } from "./models/meta.js";
 import { Microsoft } from "./models/microsoft.js";
 import { XAi } from "./models/xai.js";
 import { Core42 } from "./models/core42.js";
+import { checkAndIncrementLimit } from "./utils/checkRateLimit.js";
 
 // Register a WebSocket server
 export default async function SocketServer(server) {
@@ -15,139 +16,116 @@ export default async function SocketServer(server) {
     },
   });
 
-  // No logs or errors about rate limit from the server so had to track it manually
-  let ChatGPTRequestCount = 0;
-  let ChatGPTRequestsPerDay = 50;
-
-  let MetaRequestCount = 0;
-  let MetaRequestsPerDay = 50;
-
-  let MicrosoftRequestCount = 0;
-  let MicrosoftRequestsPerDay = 150;
-
-  let XAiRequestCount = 0;
-  let XAiRequestsPerDay = 30;
-
-  let Core42RequestCount = 0;
-  let Core42RequestsPerDay = 150;
-
-  // reset counter every 24h
-  setInterval(() => {
-    ChatGPTRequestCount = 0;
-    MetaRequestCount = 0;
-    MicrosoftRequestCount = 0;
-    XAiRequestCount = 0;
-    Core42RequestCount = 0;
-  }, 24 * 60 * 60 * 1000);
-
   // Listening for new client connections
   io.on("connection", async (socket) => {
     console.log(`Connected Successfully from Server Side : ${socket.id}`);
 
     // ChatGPT
     socket.on("chatgpt_conversation", async (userMessage) => {
-      const remaining = ChatGPTRequestsPerDay - ChatGPTRequestCount;
+      const { allowed, remaining } = await checkAndIncrementLimit(
+        "chatgpt",
+        47
+      );
+
+      if (!allowed) {
+        socket.emit("rate_limit_exceeded");
+        return;
+      }
+
       try {
         const mssg = await Chatgpt(userMessage);
         socket.emit("chatgpt_conversation", mssg);
-
-        if (remaining <= 5) {
-          socket.emit("rate_limit_exceeded");
-          return;
-        }
-
-        ChatGPTRequestCount++;
-
-        console.log(" ChatGPT user message:", userMessage);
-        console.log("Remaining ChatGPT requests:", remaining - 1);
+        console.log("ChatGPT user message:", userMessage);
+        console.log("Remaining ChatGPT requests:", remaining);
       } catch (error) {
+        socket.emit("error", "Something went wrong, try again");
         console.error("ChatGPT Error:", error);
-        socket.emit("error", { message: "Unexpected error. Try again later." });
       }
     });
 
     // Meta
     socket.on("meta_conversation", async (userMessage) => {
-      const remaining = MetaRequestsPerDay - MetaRequestCount;
+      const { allowed, remaining } = await checkAndIncrementLimit("meta", 147);
+
+      if (!allowed) {
+        socket.emit("rate_limit_exceeded");
+        return;
+      }
+
       try {
         const mssg = await Meta(userMessage);
         socket.emit("meta_conversation", mssg);
-
-        if (remaining <= 5) {
-          socket.emit("rate_limit_exceeded");
-          return;
-        }
-
-        MetaRequestCount++;
         console.log("Meta user message:", userMessage);
-        console.log("Remaining Meta requests:", remaining - 1);
+        console.log("Remaining Meta requests:", remaining);
       } catch (error) {
+        socket.emit("error", "Something went wrong, try again");
         console.error("Meta Error:", error);
-        socket.emit("error", { message: "Unexpected error. Try again later." });
       }
     });
 
     // Microsoft
     socket.on("microsoft_conversation", async (userMessage) => {
-      const remaining = MicrosoftRequestsPerDay - MicrosoftRequestCount;
+      const { allowed, remaining } = await checkAndIncrementLimit(
+        "microsoft",
+        147
+      );
+
+      if (!allowed) {
+        socket.emit("rate_limit_exceeded");
+        return;
+      }
 
       try {
         const mssg = await Microsoft(userMessage);
         socket.emit("microsoft_conversation", mssg);
-        if (remaining <= 5) {
-          socket.emit("rate_limit_exceeded");
-          return;
-        }
-
-        MicrosoftRequestCount++;
         console.log("Microsoft user message:", userMessage);
-        console.log("Remaining Microsoft requests:", remaining - 1);
+        console.log("Remaining Microsoft requests:", remaining);
       } catch (error) {
+        socket.emit("error", "Something went wrong, try again");
         console.error("Microsoft Error:", error);
-        socket.emit("error", { message: "Unexpected error. Try again later." });
       }
     });
 
     // XAi
     socket.on("xai_conversation", async (userMessage) => {
-      const remaining = XAiRequestsPerDay - XAiRequestCount;
+      const { allowed, remaining } = await checkAndIncrementLimit("xai", 27);
+
+      if (!allowed) {
+        socket.emit("rate_limit_exceeded");
+        return;
+      }
 
       try {
         const mssg = await XAi(userMessage);
         socket.emit("xai_conversation", mssg);
-
-        if (remaining <= 5) {
-          socket.emit("rate_limit_exceeded");
-          return;
-        }
-
-        XAiRequestCount++;
-        console.log(" XAi user message:", userMessage);
-        console.log("Remaining XAi requests:", remaining - 1);
+        console.log("xAi user message:", userMessage);
+        console.log("Remaining xAi requests:", remaining);
       } catch (error) {
-        console.error("XAi Error:", error);
-        socket.emit("error", { message: "Unexpected error. Try again later." });
+        socket.emit("error", "Something went wrong, try again");
+        console.error("xAi Error:", error);
       }
     });
 
     // Core42
     socket.on("core42_conversation", async (userMessage) => {
-      const remaining = Core42RequestsPerDay - Core42RequestCount;
+      const { allowed, remaining } = await checkAndIncrementLimit(
+        "core42",
+        147
+      );
+
+      if (!allowed) {
+        socket.emit("rate_limit_exceeded");
+        return;
+      }
 
       try {
         const mssg = await Core42(userMessage);
         socket.emit("core42_conversation", mssg);
-        if (remaining <= 5) {
-          socket.emit("rate_limit_exceeded");
-          return;
-        }
-
-        Core42RequestCount++;
         console.log("Core42 user message:", userMessage);
-        console.log("Remaining Core42 requests:", remaining - 1);
+        console.log("Remaining Core42 requests:", remaining);
       } catch (error) {
+        socket.emit("error", "Something went wrong, try again");
         console.error("Core42 Error:", error);
-        socket.emit("error", { message: "Unexpected error. Try again later." });
       }
     });
   });

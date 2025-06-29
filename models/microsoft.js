@@ -54,6 +54,3 @@ export async function Microsoft(userMessage) {
 
   return message.content;
 }
-Microsoft("testing... respond with the word success ✅")
-  .then(console.log)
-  .catch(console.error);

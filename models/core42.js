@@ -52,4 +52,3 @@ export async function Core42(userMessage) {
 
   return message.content;
 }
-Core42("اختبار...  الرد بكلمة نجاح✅").then(console.log).catch(console.error);
