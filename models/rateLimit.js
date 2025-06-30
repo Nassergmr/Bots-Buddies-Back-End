@@ -6,6 +6,6 @@ const RateLimitSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-RateLimitSchema.index({ createdAt: 1 }, { expireAfterSeconds: 180 });
+RateLimitSchema.index({ createdAt: 1 }, { expireAfterSeconds: 86400 });
 
 export const RateLimit = mongoose.model("RateLimit", RateLimitSchema);
