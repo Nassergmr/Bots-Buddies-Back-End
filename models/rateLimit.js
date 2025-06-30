@@ -1,13 +1,11 @@
-// models/rateLimit.js
 import mongoose from "mongoose";
 
 const RateLimitSchema = new mongoose.Schema({
-  model: { type: String, required: true },
+  model: { type: String, required: true, unique: true },
   count: { type: Number, default: 1 },
-  createdAt: { type: Date, default: Date.now, expires: 86400 }, // 24h
+  createdAt: { type: Date, default: Date.now },
 });
 
-// Unique index to avoid duplicates
-RateLimitSchema.index({ model: 1 }, { unique: true });
+RateLimitSchema.index({ createdAt: 1 }, { expireAfterSeconds: 180 });
 
 export const RateLimit = mongoose.model("RateLimit", RateLimitSchema);

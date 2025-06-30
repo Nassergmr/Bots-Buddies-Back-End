@@ -24,7 +24,7 @@ export default async function SocketServer(server) {
     socket.on("chatgpt_conversation", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "chatgpt",
-        47
+        45
       );
 
       if (!allowed) {
@@ -34,9 +34,10 @@ export default async function SocketServer(server) {
 
       try {
         const mssg = await Chatgpt(userMessage);
-        socket.emit("chatgpt_conversation", mssg);
         console.log("ChatGPT user message:", userMessage);
+        socket.emit("chatgpt_conversation", mssg);
         console.log("Remaining ChatGPT requests:", remaining);
+        socket.emit("chatgpt_mssg_generated");
       } catch (error) {
         socket.emit("error", "Something went wrong, try again");
         console.error("ChatGPT Error:", error);
@@ -45,7 +46,7 @@ export default async function SocketServer(server) {
 
     // Meta
     socket.on("meta_conversation", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("meta", 147);
+      const { allowed, remaining } = await checkAndIncrementLimit("meta", 145);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
@@ -54,9 +55,10 @@ export default async function SocketServer(server) {
 
       try {
         const mssg = await Meta(userMessage);
-        socket.emit("meta_conversation", mssg);
         console.log("Meta user message:", userMessage);
+        socket.emit("meta_conversation", mssg);
         console.log("Remaining Meta requests:", remaining);
+        socket.emit("meta_mssg_generated");
       } catch (error) {
         socket.emit("error", "Something went wrong, try again");
         console.error("Meta Error:", error);
@@ -67,7 +69,7 @@ export default async function SocketServer(server) {
     socket.on("microsoft_conversation", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "microsoft",
-        147
+        145
       );
 
       if (!allowed) {
@@ -77,9 +79,10 @@ export default async function SocketServer(server) {
 
       try {
         const mssg = await Microsoft(userMessage);
-        socket.emit("microsoft_conversation", mssg);
         console.log("Microsoft user message:", userMessage);
+        socket.emit("microsoft_conversation", mssg);
         console.log("Remaining Microsoft requests:", remaining);
+        socket.emit("microsoft_mssg_generated");
       } catch (error) {
         socket.emit("error", "Something went wrong, try again");
         console.error("Microsoft Error:", error);
@@ -88,7 +91,7 @@ export default async function SocketServer(server) {
 
     // XAi
     socket.on("xai_conversation", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("xai", 27);
+      const { allowed, remaining } = await checkAndIncrementLimit("xai", 25);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
@@ -97,9 +100,10 @@ export default async function SocketServer(server) {
 
       try {
         const mssg = await XAi(userMessage);
-        socket.emit("xai_conversation", mssg);
         console.log("xAi user message:", userMessage);
+        socket.emit("xai_conversation", mssg);
         console.log("Remaining xAi requests:", remaining);
+        socket.emit("xai_mssg_generated");
       } catch (error) {
         socket.emit("error", "Something went wrong, try again");
         console.error("xAi Error:", error);
@@ -110,7 +114,7 @@ export default async function SocketServer(server) {
     socket.on("core42_conversation", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "core42",
-        147
+        145
       );
 
       if (!allowed) {
@@ -120,9 +124,10 @@ export default async function SocketServer(server) {
 
       try {
         const mssg = await Core42(userMessage);
-        socket.emit("core42_conversation", mssg);
         console.log("Core42 user message:", userMessage);
+        socket.emit("core42_conversation", mssg);
         console.log("Remaining Core42 requests:", remaining);
+        socket.emit("core42_mssg_generated");
       } catch (error) {
         socket.emit("error", "Something went wrong, try again");
         console.error("Core42 Error:", error);
