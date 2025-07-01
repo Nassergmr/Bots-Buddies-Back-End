@@ -6,7 +6,7 @@ dotenv.config();
 
 const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
-const model = "meta/Meta-Llama-3-8B-Instruct";
+const model = "meta/Meta-Llama-3.1-8B-Instruct";
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 
@@ -15,9 +15,9 @@ export async function Meta(userMessage) {
 
   chatHistory.push({ role: "user", content: userMessage });
 
-  // Keep Only The Last 20 Messages In Memory
-  if (chatHistory.length > 20) {
-    chatHistory = chatHistory.slice(-20);
+  // Keep Only The Last 10 Messages In Memory
+  if (chatHistory.length > 10) {
+    chatHistory = chatHistory.slice(-10);
   }
 
   let response;
@@ -30,6 +30,11 @@ export async function Meta(userMessage) {
         model: model,
       },
     });
+
+    if (response.status === 413) {
+      chatHistory = chatHistory.slice(-5);
+      console.log("History reset successfully");
+    }
 
     console.log("Meta Response Status:", response.status);
   } catch (error) {

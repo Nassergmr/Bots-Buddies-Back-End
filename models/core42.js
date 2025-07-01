@@ -15,12 +15,13 @@ export async function Core42(userMessage) {
 
   chatHistory.push({ role: "user", content: userMessage });
 
-  // Keep Only The Last 20 Messages In Memory
-  if (chatHistory.length > 20) {
-    chatHistory = chatHistory.slice(-20);
+  // Keep Only The Last 10 Messages In Memory
+  if (chatHistory.length > 10) {
+    chatHistory = chatHistory.slice(-10);
   }
 
   let response;
+
   try {
     response = await client.path("/chat/completions").post({
       body: {
@@ -30,6 +31,11 @@ export async function Core42(userMessage) {
         model: model,
       },
     });
+
+    if (response.status === 413) {
+      chatHistory = chatHistory.slice(-5);
+      console.log("History reset successfully");
+    }
 
     console.log("Core42 Response Status:", response.status);
   } catch (error) {
