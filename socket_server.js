@@ -46,7 +46,7 @@ export default async function SocketServer(server) {
 
     // Meta
     socket.on("meta_conversation", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("meta", 145);
+      const { allowed, remaining } = await checkAndIncrementLimit("meta", 45);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
