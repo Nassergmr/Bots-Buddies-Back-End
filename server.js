@@ -6,7 +6,7 @@ import SocketServer from "./socket_server.js";
 // Load .env variables
 config();
 
-// No logs or errors about rate limit from the server so had to track it manually using mongodb
+// Connect MongoDB
 mongoose
   .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
@@ -25,21 +25,31 @@ process.on("unhandledRejection", (err) => {
   console.error("Unhandled Rejection:", err);
 });
 
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received. Shutting down gracefully...");
-  server.close(() => {
-    console.log("Server terminated.");
-    process.exit(0);
-  });
-});
-
 const PORT = process.env.PORT || 3001;
+
+// Create HTTP server with manual CORS
 const server = createServer((req, res) => {
+  // Set CORS headers
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://bots-buddies.vercel.app"
+  );
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  // Handle preflight OPTIONS request
+  if (req.method === "OPTIONS") {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  // Health check
   if (req.url === "/health") {
-    res.writeHead(200);
+    res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("OK");
   } else {
-    res.writeHead(200);
+    res.writeHead(200, { "Content-Type": "text/plain" });
     res.end("Running");
   }
 });
