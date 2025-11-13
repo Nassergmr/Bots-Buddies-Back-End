@@ -4,6 +4,7 @@ import { Meta } from "./models/meta.js";
 import { Microsoft } from "./models/microsoft.js";
 import { XAi } from "./models/xai.js";
 import { Core42 } from "./models/core42.js";
+import { Codestral } from "./models/codestral.js";
 import { checkAndIncrementLimit } from "./utils/checkRateLimit.js";
 
 // Register a WebSocket server
@@ -131,6 +132,30 @@ export default async function SocketServer(server) {
       } catch (error) {
         socket.emit("error", "Something went wrong, try again");
         console.error("Core42 Error:", error);
+      }
+    });
+
+    // Codestral
+    socket.on("codestral_conversation", async (userMessage) => {
+      const { allowed, remaining } = await checkAndIncrementLimit(
+        "codestral",
+        145
+      );
+
+      if (!allowed) {
+        socket.emit("rate_limit_exceeded");
+        return;
+      }
+
+      try {
+        const mssg = await Codestral(userMessage);
+        console.log("codestral user message:", userMessage);
+        socket.emit("codestral_conversation", mssg);
+        console.log("Remaining codestral requests:", remaining);
+        socket.emit("codestral_mssg_generated");
+      } catch (error) {
+        socket.emit("error", "Something went wrong, try again");
+        console.error("Codestral Error:", error);
       }
     });
   });
