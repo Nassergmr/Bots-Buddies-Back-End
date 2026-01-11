@@ -12,7 +12,7 @@ export default async function SocketServer(server) {
   // Creating a new Socket.IO server instance and attaching it to the provided HTTP server
   const io = new Server(server, {
     cors: {
-      origin: "http://localhost:3000",
+      origin: "https://bots-buddies-v2.vercel.app",
       methods: ["GET", "POST"],
     },
   });
