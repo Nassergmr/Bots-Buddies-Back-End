@@ -7,6 +7,7 @@ dotenv.config();
 const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "mistral-ai/Codestral-2501";
+// const modelName = "ai21-labs/AI21-Jamba-1.5-Large";
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 

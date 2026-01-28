@@ -32,7 +32,8 @@ const server = createServer((req, res) => {
   // Set CORS headers
   res.setHeader(
     "Access-Control-Allow-Origin",
-    "https://bots-buddies-v2.vercel.app"
+    "https://bots-buddies-v2.vercel.app",
+    // "http://localhost:3000"
   );
   res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");

@@ -7,8 +7,7 @@ dotenv.config();
 const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "xai/grok-3-mini";
-
-const requestsPerDay = 30;
+// const model = "xai/grok-3";
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 

@@ -7,6 +7,7 @@ dotenv.config();
 const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
 const model = "meta/Llama-4-Scout-17B-16E-Instruct";
+// const model = "meta/Llama-4-Scout-17B-16E-Instruct";
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 

@@ -6,8 +6,8 @@ dotenv.config();
 
 const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
-const model = "microsoft/Phi-4";
-
+const model = "microsoft/Phi-4-mini-instruct";
+// const model = "microsoft/Phi-4";
 const requestsPerDay = 150;
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];

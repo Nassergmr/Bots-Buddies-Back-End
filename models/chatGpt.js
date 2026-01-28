@@ -6,7 +6,8 @@ dotenv.config();
 
 const token = process.env.GITHUB_TOKEN;
 const endpoint = "https://models.github.ai/inference";
-const model = "openai/gpt-4.1";
+const model = "openai/gpt-4.1-mini";
+// const model = "openai/gpt-4o-mini";
 
 let chatHistory = [{ role: "system", content: "You are a helpful assistant." }];
 
@@ -21,14 +22,28 @@ export async function Chatgpt(userMessage) {
   if (chatHistory.length > 10) {
     chatHistory = chatHistory.slice(-10);
   }
-  const response = await client.path("/chat/completions").post({
-    body: {
-      messages: chatHistory,
-      temperature: 1.0,
-      top_p: 1.0,
-      model: model,
-    },
-  });
+
+  let response;
+  try {
+    response = await client.path("/chat/completions").post({
+      body: {
+        messages: chatHistory,
+        temperature: 1.0,
+        top_p: 1.0,
+        model: model,
+      },
+    });
+
+    if (response.status === 413) {
+      chatHistory = chatHistory.slice(-5);
+      console.log("History reset successfully");
+    }
+
+    console.log("Gpt Response Status:", response.status);
+  } catch (error) {
+    console.log("Error With Meta Api:", error);
+    throw new Error("Error With Meta Api Failed");
+  }
 
   if (isUnexpected(response)) {
     throw response.body.error;
