@@ -25,7 +25,7 @@ export default async function SocketServer(server) {
     socket.on("chatgpt_conversation", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "chatgpt",
-        60,
+        140,
       );
 
       if (!allowed) {
@@ -48,7 +48,7 @@ export default async function SocketServer(server) {
     socket.on("chatgpt_conversation_2", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "chatgpt",
-        70,
+        140,
       );
 
       if (!allowed) {
@@ -70,7 +70,7 @@ export default async function SocketServer(server) {
 
     // Meta
     socket.on("meta_conversation", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("meta", 18);
+      const { allowed, remaining } = await checkAndIncrementLimit("meta", 45);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
@@ -90,7 +90,7 @@ export default async function SocketServer(server) {
     });
 
     socket.on("meta_conversation_2", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("meta", 30);
+      const { allowed, remaining } = await checkAndIncrementLimit("meta", 45);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
@@ -113,7 +113,7 @@ export default async function SocketServer(server) {
     socket.on("microsoft_conversation", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "microsoft",
-        60,
+        140,
       );
 
       if (!allowed) {
@@ -136,7 +136,7 @@ export default async function SocketServer(server) {
     socket.on("microsoft_conversation_2", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "microsoft",
-        70,
+        140,
       );
 
       if (!allowed) {
@@ -158,7 +158,7 @@ export default async function SocketServer(server) {
 
     // XAi
     socket.on("xai_conversation", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("xai", 9);
+      const { allowed, remaining } = await checkAndIncrementLimit("xai", 25);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
@@ -178,7 +178,7 @@ export default async function SocketServer(server) {
     });
 
     socket.on("xai_conversation_2", async (userMessage) => {
-      const { allowed, remaining } = await checkAndIncrementLimit("xai", 19);
+      const { allowed, remaining } = await checkAndIncrementLimit("xai", 25);
 
       if (!allowed) {
         socket.emit("rate_limit_exceeded");
@@ -225,7 +225,7 @@ export default async function SocketServer(server) {
     socket.on("codestral_conversation", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "codestral",
-        60,
+        145,
       );
 
       if (!allowed) {
@@ -248,7 +248,7 @@ export default async function SocketServer(server) {
     socket.on("codestral_conversation_2", async (userMessage) => {
       const { allowed, remaining } = await checkAndIncrementLimit(
         "codestral",
-        70,
+        145,
       );
 
       if (!allowed) {
@@ -267,29 +267,5 @@ export default async function SocketServer(server) {
         console.error("Codestral Error:", error);
       }
     });
-
-    // All Models
-    // socket.on("all_models_conversation", async (userMessage) => {
-    //   try {
-    //     const chatgptMssg = await Chatgpt(userMessage);
-    //     const metaMssg = await Meta(userMessage);
-    //     const microsoftMssg = await Microsoft(userMessage);
-    //     const xAIMssg = await XAi(userMessage);
-    //     const codestralMssg = await Codestral(userMessage);
-    //     console.log("All models user message:", userMessage);
-    //     socket.emit("all_models_conversation", [
-    //       chatgptMssg,
-    //       metaMssg,
-    //       microsoftMssg,
-    //       xAIMssg,
-    //       codestralMssg,
-    //     ]);
-    //     // console.log("Remaining codestral requests:", remaining);
-    //     socket.emit("all_models_mssg_generated");
-    //   } catch (error) {
-    //     socket.emit("error", "Something went wrong, try again");
-    //     console.error("All Models Error:", error);
-    //   }
-    // });
   });
 }
