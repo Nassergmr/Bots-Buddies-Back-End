@@ -13,6 +13,7 @@ export default async function SocketServer(server) {
   const io = new Server(server, {
     cors: {
       origin: "https://bots-buddies-v2.vercel.app",
+      // origin: "http://localhost:3000",
       methods: ["GET", "POST"],
     },
   });
@@ -29,7 +30,7 @@ export default async function SocketServer(server) {
       );
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_gpt");
         return;
       }
 
@@ -52,7 +53,7 @@ export default async function SocketServer(server) {
       );
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_gpt");
         return;
       }
 
@@ -73,7 +74,7 @@ export default async function SocketServer(server) {
       const { allowed, remaining } = await checkAndIncrementLimit("meta", 45);
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_llama");
         return;
       }
 
@@ -93,7 +94,7 @@ export default async function SocketServer(server) {
       const { allowed, remaining } = await checkAndIncrementLimit("meta", 45);
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_llama");
         return;
       }
 
@@ -117,7 +118,7 @@ export default async function SocketServer(server) {
       );
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_microsoft");
         return;
       }
 
@@ -140,7 +141,7 @@ export default async function SocketServer(server) {
       );
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_microsoft");
         return;
       }
 
@@ -161,7 +162,7 @@ export default async function SocketServer(server) {
       const { allowed, remaining } = await checkAndIncrementLimit("xai", 25);
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_xai");
         return;
       }
 
@@ -181,7 +182,7 @@ export default async function SocketServer(server) {
       const { allowed, remaining } = await checkAndIncrementLimit("xai", 25);
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_xai");
         return;
       }
 
@@ -229,7 +230,7 @@ export default async function SocketServer(server) {
       );
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_codestral");
         return;
       }
 
@@ -252,7 +253,7 @@ export default async function SocketServer(server) {
       );
 
       if (!allowed) {
-        socket.emit("rate_limit_exceeded");
+        socket.emit("rate_limit_exceeded_codestral");
         return;
       }
 
